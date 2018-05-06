@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Editor from './Editor/Editor';
+import CodeEditor from './CodeEditor/CodeEditor';
 
 class App extends Component {
   constructor(props) {
@@ -50,6 +51,7 @@ export default MyComponent;</code></pre>
     return (
       <div className="App">
         <Editor content={content} onBlur={this.contentChange} onSave={this.save} />
+        <CodeEditor />
       </div>
     );
   }

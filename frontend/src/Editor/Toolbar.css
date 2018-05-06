@@ -1,3 +1,8 @@
+div.auth0-editor-toolbar {
+  background-color: #ddd;
+  text-align: center;
+}
+
 div.auth0-editor-toolbar button {
   border: 1px solid #999;
   background-color: #eee;
