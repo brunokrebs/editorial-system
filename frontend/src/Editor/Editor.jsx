@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import TurndownService from 'turndown';
 import './Editor.css';
 
 class Editor extends Component {
@@ -11,13 +12,26 @@ class Editor extends Component {
         __html: props.content,
       },
     };
+
+    this.turndownService = new TurndownService({
+      headingStyle: 'atx',
+      bulletListMarker: '-',
+      codeBlockStyle: 'fenced',
+    });
+  }
+
+  onBlur(html) {
+    console.log(html);
+    const markdown = this.turndownService.turndown(html);
+    console.log(markdown);
+    this.props.onBlur(markdown);
   }
 
   render() {
     return (
       <div
         className="auth0-editor"
-        onBlur={(event) => {this.props.onBlur(event.target.innerHTML)}}
+        onBlur={(event) => {this.onBlur(event.target.innerHTML)}}
         contentEditable={true}
         dangerouslySetInnerHTML={this.state.content}
       />

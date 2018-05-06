@@ -20,12 +20,17 @@ class App extends Component {
 
   render() {
     const content = '<h1>testing</h1>';
+
+    const textareaStyle = {
+      width: '100%',
+      minHeight: '300px',
+      resize: 'vertical',
+    };
+
     return (
       <div className="App">
         <Editor content={content} onBlur={this.contentChange} />
-        <p>
-          {this.state.content}
-        </p>
+        <textarea style={textareaStyle} value={this.state.content} />
       </div>
     );
   }
