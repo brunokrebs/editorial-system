@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Editor from './Editor/Editor';
-import CodeEditor from './CodeEditor/CodeEditor';
 
 class App extends Component {
   constructor(props) {
@@ -34,7 +33,7 @@ class App extends Component {
         <li>Item number two (still not numbered).</li>
       </ul>
       <div>Another paragraph. This one exists to show how an <code>inline code</code> works and to precede a code block:</div>
-      <pre contenteditable="false"><code class="language-js">import React, {Component} from 'react';
+      <pre class="code-editor" contenteditable="false"><code class="language-js code-editor">import React, {Component} from 'react';
           
 class MyComponent extends Component {
   render() {
@@ -51,7 +50,6 @@ export default MyComponent;</code></pre>
     return (
       <div className="App">
         <Editor content={content} onBlur={this.contentChange} onSave={this.save} />
-        <CodeEditor />
       </div>
     );
   }

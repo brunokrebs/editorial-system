@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import TurndownService from 'turndown';
+import CodeEditor from '../CodeEditor/CodeEditor';
 import './Editor.css';
-import Toolbar from "./Toolbar";
+import Toolbar from './Toolbar';
 
 class Editor extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class Editor extends Component {
       content: {
         __html: props.content,
       },
+      showEditor: false,
     };
 
     this.turndownService = new TurndownService({
@@ -22,6 +24,7 @@ class Editor extends Component {
 
     this.keyDown = this.keyDown.bind(this);
     this.onBlur = this.onBlur.bind(this);
+    this.editorClicked = this.editorClicked.bind(this);
   }
 
   keyDown(event) {
@@ -35,6 +38,14 @@ class Editor extends Component {
     this.props.onBlur(markdown);
   }
 
+  editorClicked(event) {
+    if (event.target.className.substring('code-editor' > -1)) {
+      this.setState({
+        showEditor: true,
+      });
+    }
+  }
+
   render() {
     return (
       <div className="auth0-editor-wrapper">
@@ -45,7 +56,9 @@ class Editor extends Component {
           contentEditable={true}
           dangerouslySetInnerHTML={this.state.content}
           onKeyDown={this.keyDown}
+          onClick={this.editorClicked}
         />
+        { this.state.showEditor && <CodeEditor /> }
       </div>
     );
   }
