@@ -27,6 +27,9 @@ class Editor extends Component {
     this.onBlur = this.onBlur.bind(this);
     this.editorClicked = this.editorClicked.bind(this);
     this.closeEditor = this.closeEditor.bind(this);
+    this.onSaveCodeEditor = this.onSaveCodeEditor.bind(this);
+
+    this.editorRef = React.createRef();
   }
 
   keyDown(event) {
@@ -41,7 +44,11 @@ class Editor extends Component {
   }
 
   editorClicked(event) {
-    if (event.target.className.substring('code-editor' > -1)) {
+    const {tagName, className} = event.target;
+    const isCodeElement = tagName === 'PRE' || tagName === 'CODE';
+    const isCodeBlock = isCodeElement && className.indexOf('code-editor') > -1;
+    if (isCodeBlock) {
+      this.codeBlockBeingEdited = event.target;
       this.setState({
         showEditor: true,
         code: event.target.innerText,
@@ -55,14 +62,24 @@ class Editor extends Component {
     });
   }
 
-  onSaveEditor(code) {
-    console.log(code);
+  onSaveCodeEditor(code) {
+    this.codeBlockBeingEdited.innerText = code;
+    this.setState({
+      content: {
+        __html: this.editorRef.current.innerHTML,
+      },
+      showEditor: false,
+    });
+  }
+
+  onSaveEditor() {
+    this.props.onSave(this.editorRef.current.innerHTML);
   }
 
   render() {
     return (
       <div className="auth0-editor-wrapper">
-        <Toolbar onSave={this.props.onSave} />
+        <Toolbar onSave={() => {this.onSaveEditor()}} />
         <div
           className="auth0-editor"
           onBlur={(event) => {this.onBlur(event.target.innerHTML)}}
@@ -70,12 +87,13 @@ class Editor extends Component {
           dangerouslySetInnerHTML={this.state.content}
           onKeyDown={this.keyDown}
           onClick={this.editorClicked}
+          ref={this.editorRef}
         />
         {
           this.state.showEditor &&
           <CodeEditor
             onCancel={this.closeEditor}
-            onSave={this.onSaveEditor}
+            onSave={this.onSaveCodeEditor}
             code={this.state.code}
           />
         }
