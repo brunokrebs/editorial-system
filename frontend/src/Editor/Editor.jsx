@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import TurndownService from 'turndown';
 import './Editor.css';
+import Toolbar from "./Toolbar";
 
 class Editor extends Component {
   constructor(props) {
@@ -29,12 +30,15 @@ class Editor extends Component {
 
   render() {
     return (
-      <div
-        className="auth0-editor"
-        onBlur={(event) => {this.onBlur(event.target.innerHTML)}}
-        contentEditable={true}
-        dangerouslySetInnerHTML={this.state.content}
-      />
+      <div className="auth0-editor-wrapper">
+        <Toolbar />
+        <div
+          className="auth0-editor"
+          onBlur={(event) => {this.onBlur(event.target.innerHTML)}}
+          contentEditable={true}
+          dangerouslySetInnerHTML={this.state.content}
+        />
+      </div>
     );
   }
 }

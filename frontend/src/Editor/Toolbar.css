@@ -1,0 +1,7 @@
+div.auth0-editor-toolbar button {
+  padding: 5px 15px 5px 15px;
+  border: 1px solid #999;
+  background-color: #eee;
+  border-radius: 2px;
+  line-height: 20px;
+}

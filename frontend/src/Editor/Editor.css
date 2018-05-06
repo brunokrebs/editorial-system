@@ -2,3 +2,7 @@ div.auth0-editor {
   background-color: moccasin;
   padding: 15px;
 }
+
+div.auth0-editor div {
+  margin-top: 20px;
+}
