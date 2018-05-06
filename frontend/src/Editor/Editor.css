@@ -6,3 +6,9 @@ div.auth0-editor {
 div.auth0-editor div {
   margin-top: 20px;
 }
+
+div.auth0-editor pre {
+  background-color: #ddd;
+  padding: 15px;
+  cursor: pointer;
+}

@@ -19,24 +19,32 @@ class Editor extends Component {
       bulletListMarker: '-',
       codeBlockStyle: 'fenced',
     });
+
+    this.keyDown = this.keyDown.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+  }
+
+  keyDown(event) {
+    if (event.key === 'Tab') {
+      return event.preventDefault();
+    }
   }
 
   onBlur(html) {
-    console.log(html);
     const markdown = this.turndownService.turndown(html);
-    console.log(markdown);
     this.props.onBlur(markdown);
   }
 
   render() {
     return (
       <div className="auth0-editor-wrapper">
-        <Toolbar />
+        <Toolbar onSave={this.props.onSave} />
         <div
           className="auth0-editor"
           onBlur={(event) => {this.onBlur(event.target.innerHTML)}}
           contentEditable={true}
           dangerouslySetInnerHTML={this.state.content}
+          onKeyDown={this.keyDown}
         />
       </div>
     );
@@ -46,6 +54,7 @@ class Editor extends Component {
 Editor.propTypes = {
   content: PropTypes.string.isRequired,
   onBlur: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
 export default Editor;

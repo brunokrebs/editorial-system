@@ -10,12 +10,17 @@ class App extends Component {
     };
 
     this.contentChange = this.contentChange.bind(this);
+    this.save = this.save.bind(this);
   }
 
   contentChange(content) {
     this.setState({
       content,
     });
+  }
+
+  save() {
+    console.log(this.state.content);
   }
 
   render() {
@@ -28,7 +33,7 @@ class App extends Component {
         <li>Item number two (still not numbered).</li>
       </ul>
       <div>Another paragraph. This one exists to show how an <code>inline code</code> works and to precede a code block:</div>
-      <pre><code class="language-js">import React, {Component} from 'react';
+      <pre contenteditable="false"><code class="language-js">import React, {Component} from 'react';
           
 class MyComponent extends Component {
   render() {
@@ -42,16 +47,9 @@ export default MyComponent;</code></pre>
       <div>This is the last paragraph. Awesome, right?</div>
     `;
 
-    const textareaStyle = {
-      width: '100%',
-      minHeight: '300px',
-      resize: 'vertical',
-    };
-
     return (
       <div className="App">
-        <Editor content={content} onBlur={this.contentChange} />
-        <textarea style={textareaStyle} value={this.state.content} />
+        <Editor content={content} onBlur={this.contentChange} onSave={this.save} />
       </div>
     );
   }
