@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import AceEditor from 'react-ace';
+import PropTypes from 'prop-types';
 import 'brace/mode/java';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
@@ -10,41 +11,47 @@ import './CodeEditor.css';
 class CodeEditor extends Component {
   constructor(props) {
     super(props);
+
     this.el = document.createElement('div');
-    this.el.className = "auth0-code-editor-modal";
+    this.el.className = 'auth0-code-editor-modal';
+
+    this.state = {
+      code: props.code,
+    };
+
+    this.updateCode = this.updateCode.bind(this);
+  }
+
+  updateCode(code) {
+    this.setState({
+      code,
+    });
   }
 
   componentDidMount() {
     document.body.appendChild(this.el);
   }
 
-  render() {
-    const value = `import React, {Component} from 'react';
-          
-class MyComponent extends Component {
-  render() {
-    return (
-      <div>Hello world</div>
-    );
+  componentWillUnmount() {
+    document.body.removeChild(this.el);
   }
-}
-          
-export default MyComponent;`;
 
+  render() {
     return ReactDOM.createPortal(
       <div className="editor-area">
         <div className="editor-modal">
           <div className="code-editor-toolbar">
             <h3>Code Editor</h3>
-            <button>Cancel</button>
-            <button>Save</button>
+            <button onClick={this.props.onCancel}>Cancel</button>
+            <button onClick={() => {this.props.onSave(this.state.code)}}>Save</button>
           </div>
           <AceEditor
             mode="jsx"
             theme="monokai"
-            value={value}
+            value={this.state.code}
             width={'100%'}
             height={'300px'}
+            onChange={this.updateCode}
             name="UNIQUE_ID_OF_DIV"
             editorProps={{$blockScrolling: true}}
           />
@@ -54,5 +61,11 @@ export default MyComponent;`;
     );
   }
 }
+
+CodeEditor.propTypes = {
+  code: PropTypes.string.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+};
 
 export default CodeEditor;

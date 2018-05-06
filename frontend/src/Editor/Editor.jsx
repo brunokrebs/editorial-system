@@ -14,6 +14,7 @@ class Editor extends Component {
         __html: props.content,
       },
       showEditor: false,
+      code: '',
     };
 
     this.turndownService = new TurndownService({
@@ -25,6 +26,7 @@ class Editor extends Component {
     this.keyDown = this.keyDown.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.editorClicked = this.editorClicked.bind(this);
+    this.closeEditor = this.closeEditor.bind(this);
   }
 
   keyDown(event) {
@@ -42,8 +44,19 @@ class Editor extends Component {
     if (event.target.className.substring('code-editor' > -1)) {
       this.setState({
         showEditor: true,
+        code: event.target.innerText,
       });
     }
+  }
+
+  closeEditor() {
+    this.setState({
+      showEditor: false,
+    });
+  }
+
+  onSaveEditor(code) {
+    console.log(code);
   }
 
   render() {
@@ -58,7 +71,14 @@ class Editor extends Component {
           onKeyDown={this.keyDown}
           onClick={this.editorClicked}
         />
-        { this.state.showEditor && <CodeEditor /> }
+        {
+          this.state.showEditor &&
+          <CodeEditor
+            onCancel={this.closeEditor}
+            onSave={this.onSaveEditor}
+            code={this.state.code}
+          />
+        }
       </div>
     );
   }
