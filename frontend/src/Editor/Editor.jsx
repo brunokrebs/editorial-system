@@ -76,6 +76,22 @@ class Editor extends Component {
     this.props.onSave(this.editorRef.current.innerHTML);
   }
 
+  onPaste(event) {
+    const file = event.clipboardData.items[0].getAsFile();
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const sel = window.getSelection();
+      const range = sel.getRangeAt(0);
+      range.deleteContents();
+
+      const img = document.createElement('img');
+      img.src = evt.target.result;
+
+      range.insertNode(img);
+    };
+    reader.readAsDataURL(file);
+  }
+
   render() {
     return (
       <div className="auth0-editor-wrapper">
@@ -87,6 +103,7 @@ class Editor extends Component {
           dangerouslySetInnerHTML={this.state.content}
           onKeyDown={this.keyDown}
           onClick={this.editorClicked}
+          onPaste={this.onPaste}
           ref={this.editorRef}
         />
         {
