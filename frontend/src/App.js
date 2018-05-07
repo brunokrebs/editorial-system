@@ -1,9 +1,24 @@
 import React, { Component } from 'react';
 import Editor from './Editor/Editor';
+import {Route} from 'react-router-dom';
+import * as Auth0 from '@digituz/auth0-web';
+import ArticlesList from './Articles/ArticlesList';
+import FakeArticle from './FakeArticle';
+import Callback from './Callback/Callback';
 
 class App extends Component {
   constructor(props) {
     super(props);
+
+    this.auth0Config = {
+      domain: 'digituz-corp.auth0.com',
+      clientID: 'PjEOusUfXhiixQuyqhihGEAMIeF9Eqf3',
+      redirectUri: 'http://app.local:3000/callback',
+      responseType: 'token id_token',
+      scope: 'openid profile'
+    };
+
+    Auth0.configure(this.auth0Config);
 
     this.state = {
       content: '',
@@ -24,32 +39,22 @@ class App extends Component {
   }
 
   render() {
-    const content = `
-      <h1>testing</h1>
-      <div>This is some paragraph. Morbi in ornare felis, porta facilisis risus. Aliquam eu dolor feugiat, rhoncus metus vel, dapibus turpis. Vestibulum facilisis est elit, eu elementum libero sodales at. Nunc id lacinia mi.</div>
-      <div>This is another paragraph. Fusce a sodales est. Proin ultrices eros mauris, ac aliquet ligula dapibus sit amet. Duis aliquam convallis semper. Donec viverra orci vitae nunc fermentum interdum. Suspendisse ornare ligula id odio venenatis, quis congue elit fringilla.</div>
-      <ul>
-        <li>Item number one, although it's not numbered.</li>
-        <li>Item number two (still not numbered).</li>
-      </ul>
-      <div>Another paragraph. This one exists to show how an <code>inline code</code> works and to precede a code block:</div>
-      <pre class="code-editor" contenteditable="false"><code class="language-js code-editor">import React, {Component} from 'react';
-          
-class MyComponent extends Component {
-  render() {
-    return (
-      "Hello world"
-    );
-  }
-}
-          
-export default MyComponent;</code></pre>
-      <div>This is the last paragraph. Awesome, right?</div>
-    `;
+    const content = FakeArticle;
 
     return (
       <div className="App">
-        <Editor content={content} onBlur={this.contentChange} onSave={this.save} />
+        <Route exact path='/' render={() => (
+          <div>
+            <button onClick={Auth0.signIn}>Sign In</button>
+          </div>
+        )}/>
+        <Route exact path='/articles' render={() => (
+          <ArticlesList />
+        )}/>
+        <Route path='/callback' component={Callback} />
+        <Route exact path='/editor' render={() => (
+          <Editor content={content} onBlur={this.contentChange} onSave={this.save} />
+        )}/>
       </div>
     );
   }
