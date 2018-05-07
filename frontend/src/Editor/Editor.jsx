@@ -28,6 +28,7 @@ class Editor extends Component {
     this.editorClicked = this.editorClicked.bind(this);
     this.closeEditor = this.closeEditor.bind(this);
     this.onSaveCodeEditor = this.onSaveCodeEditor.bind(this);
+    this.focusBack = this.focusBack.bind(this);
 
     this.editorRef = React.createRef();
   }
@@ -92,10 +93,14 @@ class Editor extends Component {
     reader.readAsDataURL(file);
   }
 
+  focusBack() {
+    this.editorRef.current.focus();
+  }
+
   render() {
     return (
       <div className="auth0-editor-wrapper">
-        <Toolbar onSave={() => {this.onSaveEditor()}} />
+        <Toolbar onSave={() => {this.onSaveEditor()}} focusBack={this.focusBack} />
         <div
           className="auth0-editor"
           onBlur={(event) => {this.onBlur(event.target.innerHTML)}}
