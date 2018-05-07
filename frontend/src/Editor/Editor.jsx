@@ -39,8 +39,8 @@ class Editor extends Component {
     }
   }
 
-  onBlur(html) {
-    const markdown = this.turndownService.turndown(html);
+  onBlur() {
+    const markdown = this.turndownService.turndown(this.editorRef.current.innerHTML);
     this.props.onBlur(markdown);
   }
 
@@ -73,10 +73,6 @@ class Editor extends Component {
     });
   }
 
-  onSaveEditor() {
-    this.props.onSave(this.editorRef.current.innerHTML);
-  }
-
   onPaste(event) {
     const file = event.clipboardData.items[0].getAsFile();
     const reader = new FileReader();
@@ -100,10 +96,10 @@ class Editor extends Component {
   render() {
     return (
       <div className="auth0-editor-wrapper">
-        <Toolbar onSave={() => {this.onSaveEditor()}} focusBack={this.focusBack} />
+        <Toolbar onSave={this.props.onSave} focusBack={this.focusBack} />
         <div
           className="auth0-editor"
-          onBlur={(event) => {this.onBlur(event.target.innerHTML)}}
+          onBlur={this.onBlur}
           contentEditable={true}
           dangerouslySetInnerHTML={this.state.content}
           onKeyDown={this.keyDown}

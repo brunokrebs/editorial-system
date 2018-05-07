@@ -19,12 +19,8 @@ class App extends Component {
     });
   }
 
-  save(content) {
-    this.setState({
-      content,
-    }, () => {
-      console.log(this.state.content);
-    });
+  save() {
+    console.log(this.state.content);
   }
 
   render() {
