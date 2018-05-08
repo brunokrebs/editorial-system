@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import RestFlexClient from '@digituz/rest-flex-client';
+import ArticlesService from './ArticlesService';
 
 class ArticlesList extends Component {
   constructor(props) {
@@ -9,22 +9,12 @@ class ArticlesList extends Component {
       articles: [],
     };
 
-
-    const auth0ClientConfig = {
-      domain: 'digituz-corp.auth0.com',
-      clientID: 'PjEOusUfXhiixQuyqhihGEAMIeF9Eqf3',
-      redirectUri: 'http://app.local:3000/callback',
-      responseType: 'token id_token',
-    };
-
-    const baseUrl = 'http://localhost:3001';
-    const backendAudience = 'https://articles.digituz.com.br';
-
-    this.restFlexClient = new RestFlexClient(baseUrl, backendAudience, 'articles', auth0ClientConfig);
+    const backendURL = 'http://localhost:3001';
+    this.articlesService = new ArticlesService(backendURL);
   }
 
   componentWillMount() {
-    this.restFlexClient.get().then((articles) => {
+    this.articlesService.get().then((articles) => {
       this.setState({
         articles,
       });
@@ -33,8 +23,8 @@ class ArticlesList extends Component {
 
   render() {
     return (
-      <h1>cool</h1>
-    )
+      <h1>{this.state.articles.length}</h1>
+    );
   }
 }
 

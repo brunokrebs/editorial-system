@@ -5,6 +5,7 @@ import * as Auth0 from '@digituz/auth0-web';
 import ArticlesList from './Articles/ArticlesList';
 import FakeArticle from './FakeArticle';
 import Callback from './Callback/Callback';
+import ArticlesService from './Articles/ArticlesService';
 
 class App extends Component {
   constructor(props) {
@@ -26,6 +27,9 @@ class App extends Component {
 
     this.contentChange = this.contentChange.bind(this);
     this.save = this.save.bind(this);
+
+    const backendURL = 'http://localhost:3001';
+    this.articlesService = new ArticlesService(backendURL);
   }
 
   contentChange(content) {
@@ -35,7 +39,11 @@ class App extends Component {
   }
 
   save() {
-    console.log(this.state.content);
+    this.articlesService.insert({
+      title: 'My Article',
+      author: 'Bruno Krebs',
+      content: this.state.content,
+    });
   }
 
   render() {
