@@ -1,3 +1,4 @@
+import * as Components from '@digituz/react-components';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import TurndownService from 'turndown';
@@ -95,27 +96,29 @@ class Editor extends Component {
 
   render() {
     return (
-      <div className="auth0-editor-wrapper">
-        <Toolbar onSave={this.props.onSave} focusBack={this.focusBack} />
-        <div
-          className="auth0-editor"
-          onBlur={this.onBlur}
-          contentEditable={true}
-          dangerouslySetInnerHTML={this.state.content}
-          onKeyDown={this.keyDown}
-          onClick={this.editorClicked}
-          onPaste={this.onPaste}
-          ref={this.editorRef}
-        />
-        {
-          this.state.showEditor &&
-          <CodeEditor
-            onCancel={this.closeEditor}
-            onSave={this.onSaveCodeEditor}
-            code={this.state.code}
+      <Components.Card className="sm-12" title="Editor">
+        <div className="auth0-editor-wrapper">
+          <Toolbar onSave={this.props.onSave} focusBack={this.focusBack} />
+          <div
+            className="auth0-editor"
+            onBlur={this.onBlur}
+            contentEditable={true}
+            dangerouslySetInnerHTML={this.state.content}
+            onKeyDown={this.keyDown}
+            onClick={this.editorClicked}
+            onPaste={this.onPaste}
+            ref={this.editorRef}
           />
-        }
-      </div>
+          {
+            this.state.showEditor &&
+            <CodeEditor
+              onCancel={this.closeEditor}
+              onSave={this.onSaveCodeEditor}
+              code={this.state.code}
+            />
+          }
+        </div>
+      </Components.Card>
     );
   }
 }
