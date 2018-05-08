@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Editor from './Editor/Editor';
-import {Route} from 'react-router-dom';
+import {Route, withRouter} from 'react-router-dom';
 import * as Auth0 from '@digituz/auth0-web';
 import ArticlesList from './Articles/ArticlesList';
 import FakeArticle from './FakeArticle';
 import Callback from './Callback/Callback';
 import ArticlesService from './Articles/ArticlesService';
+import * as Components from '@digituz/react-components';
+import './App.css';
 
 class App extends Component {
   constructor(props) {
@@ -46,26 +48,71 @@ class App extends Component {
     });
   }
 
+  go(url) {
+    this.props.history.push(url);
+  }
+
+  guardedRoute(url) {
+    if (Auth0.isAuthenticated()) return this.go(url);
+    Components.NotificationManager.warning('Sign in first, please.');
+  }
+
   render() {
     const content = FakeArticle;
 
+    const divStyle = {
+      display: 'grid',
+      gridTemplateColumns: '45px 1fr auto',
+    };
+
+    const submenus = [{
+      title: 'Menu',
+      items: [
+        { title: 'Home', color: '#e6665b', onClick: () => { this.guardedRoute('/') } },
+        { title: 'Articles', color: '#66ad66', onClick: () => { this.guardedRoute('/articles') } },
+        { title: 'Editor', color: '#5e5eff', onClick: () => { this.guardedRoute('/editor') } },
+      ]
+    }];
+
     return (
-      <div className="App">
-        <Route exact path='/' render={() => (
-          <div>
-            <button onClick={Auth0.signIn}>Sign In</button>
+      <Components.Panel>
+        <Components.PanelHeader>
+          <div style={divStyle}>
+            <Components.VerticalMenu submenus={submenus} />
+            <h1 onClick={() => { this.go('/') }}>Auth0 Editorial System</h1>
+            <div className="horizontal-menu">
+              <Components.If condition={!Auth0.isAuthenticated()}>
+                <Components.Button onClick={this.signIn} text="Sign In" />
+              </Components.If>
+              <Components.If condition={Auth0.isAuthenticated()}>
+                <Components.Button onClick={this.signOut} text="Sign Out" />
+              </Components.If>
+            </div>
           </div>
-        )}/>
-        <Route exact path='/articles' render={() => (
-          <ArticlesList />
-        )}/>
-        <Route path='/callback' component={Callback} />
-        <Route exact path='/editor' render={() => (
-          <Editor content={content} onBlur={this.contentChange} onSave={this.save} />
-        )}/>
-      </div>
+        </Components.PanelHeader>
+        <Components.PanelBody>
+          <Route exact path="/" render={() => (
+            <div>
+              <h1>Hey there</h1>
+            </div>
+          )} />
+          <Route path="/callback" component={Callback} />
+          <Route exact path='/' render={() => (
+            <div>
+
+            </div>
+          )}/>
+          <Route exact path='/articles' render={() => (
+            <ArticlesList />
+          )}/>
+          <Route exact path='/editor' render={() => (
+            <Editor content={content} onBlur={this.contentChange} onSave={this.save} />
+          )}/>
+        </Components.PanelBody>
+        <Components.NotificationContainer />
+      </Components.Panel>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

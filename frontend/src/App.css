@@ -1,0 +1,8 @@
+div.drc-panel-header div.horizontal-menu {
+  text-align: right;
+  padding-top: 9px;
+}
+
+div.drc-panel-header h1 {
+  cursor: pointer;
+}
