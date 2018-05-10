@@ -98,7 +98,7 @@ class Editor extends Component {
     return (
       <Components.Card className="sm-12" title="Editor">
         <div className="auth0-editor-wrapper">
-          <Toolbar onSave={this.props.onSave} focusBack={this.focusBack} />
+          <Toolbar editorRef={this.editorRef} onSave={this.props.onSave} focusBack={this.focusBack} />
           <div
             className="auth0-editor"
             onBlur={this.onBlur}

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
 import ArticlesService from './ArticlesService';
+import {Button, Card, Table} from '@digituz/react-components';
 
 class ArticlesList extends Component {
   constructor(props) {
@@ -21,11 +23,38 @@ class ArticlesList extends Component {
     }).catch(alert);
   }
 
+  edit(article) {
+    this.props.history.push(`/editor/${article._id}`);
+  }
+
   render() {
+    const columns = [
+      {
+        label: 'Title',
+        property: 'title',
+        type: 'string',
+      },
+      {
+        label: 'Author',
+        property: 'author',
+        type: 'string',
+      },
+      {
+        label: 'Actions',
+        renderer: (article) => (
+          <div>
+            <Button onClick={() => (this.edit(article))} text="Edit" />
+            <Button text="Remove" />
+          </div>
+        )
+      },
+    ];
     return (
-      <h1>{this.state.articles.length}</h1>
+      <Card className="sm-12 md-10 md-pad-1 lg-8 lg-pad-2" title="Articles">
+        <Table columns={columns} data={this.state.articles} />
+      </Card>
     );
   }
 }
 
-export default ArticlesList;
+export default withRouter(ArticlesList);

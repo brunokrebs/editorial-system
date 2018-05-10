@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import TurndownService from 'turndown';
 import './Toolbar.css';
 
 class Toolbar extends Component {
   constructor(props) {
     super(props);
+
+    this.turndownService = new TurndownService({
+      headingStyle: 'atx',
+      bulletListMarker: '-',
+      codeBlockStyle: 'fenced',
+    });
+
+    this.export = this.export.bind(this);
     this.toggleH2 = this.toggleH2.bind(this);
   }
 
@@ -32,6 +41,19 @@ class Toolbar extends Component {
     }
   }
 
+  export() {
+    const markdown = this.turndownService.turndown(this.props.editorRef.current.innerHTML);
+
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(markdown));
+    element.setAttribute('download', 'my-first-article.md');
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+    document.body.removeChild(element);
+  }
+
   render() {
     return (
       <div className="auth0-editor-toolbar">
@@ -43,12 +65,14 @@ class Toolbar extends Component {
         <button>H3</button>
         <button>H4</button>
         <button onClick={this.props.onSave}>S</button>
+        <button onClick={this.export}>E</button>
       </div>
     );
   }
 }
 
 Toolbar.propTypes = {
+  editorRef: PropTypes.object.isRequired,
   onSave: PropTypes.func.isRequired,
   focusBack: PropTypes.func.isRequired,
 };

@@ -57,6 +57,15 @@ class App extends Component {
     Components.NotificationManager.warning('Sign in first, please.');
   }
 
+  signIn = Auth0.signIn;
+
+  signOut = () => {
+    Auth0.signOut({
+      returnTo: `${window.location.origin}`,
+      clientID: '86fnC4Rb8NsAB4feVuAyS44WDRvB5KbP',
+    })
+  };
+
   render() {
     const content = FakeArticle;
 
